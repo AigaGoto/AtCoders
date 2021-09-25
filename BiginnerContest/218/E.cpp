@@ -1,69 +1,84 @@
-#include <algorithm>
-#include <iostream>
-#include <tuple>
-#include <vector>
-
+#include <bits/stdc++.h>
 using namespace std;
-
-class UnionFind {
-public:
-  vector<int> data; // sizeとparを同時に管理する
-  UnionFind(int size) : data(size, -1) {}
-
-  int find(int x) {
-    return data[x] < 0 ? x : data[x] = find(data[x]);
-  }
-
-  void unite(int x, int y) {
-    int px = find(x);
-    int py = find(y);
-    if (px != py) {
-      if (data[py] < data[px]) swap(px, py);
-      data[px] += data[py]; data[py] = px;
+/* UnionFind：素集合系管理の構造体(union by rank)
+    isSame(x, y): x と y が同じ集合にいるか。 計算量はならし O(α(n))
+    unite(x, y): x と y を同じ集合にする。計算量はならし O(α(n))
+*/
+struct UnionFind {  // The range of node number is u 0 v n-1
+    vector<int> rank, parents;
+    UnionFind() {}
+    UnionFind(int n) {  // make n trees.
+        rank.resize(n, 0);
+        parents.resize(n, 0);
+        for (int i = 0; i < n; i++) {
+            makeTree(i);
+        }
     }
-  }
-
-  bool same(int x, int y) {
-    return find(x) == find(y);
-  }
-
-  int size(int x) {
-    return -data[find(x)];
-  }
+    void makeTree(int x) {
+        parents[x] = x;  // the parent of x is x
+        rank[x] = 0;
+    }
+    bool isSame(int x, int y) { return findRoot(x) == findRoot(y); }
+    void unite(int x, int y) {
+        x = findRoot(x);
+        y = findRoot(y);
+        if (rank[x] > rank[y]) {
+            parents[y] = x;
+        } else {
+            parents[x] = y;
+            if (rank[x] == rank[y]) {
+                rank[y]++;
+            }
+        }
+    }
+    int findRoot(int x) {
+        if (x != parents[x]) parents[x] = findRoot(parents[x]);
+        return parents[x];
+    }
 };
-
+// 辺の定義
 struct Edge {
-  int cost, from, to;
-  Edge() {}
-  Edge(int c, int f, int t) : cost(c), from(f), to(t) {}
-  friend bool operator < (const Edge& lhs, const Edge& rhs) { return lhs.cost < rhs.cost; };
-  friend bool operator > (const Edge& lhs, const Edge& rhs) { return rhs < lhs; };
-  friend bool operator <= (const Edge& lhs, const Edge& rhs) { return !(lhs > rhs); };
-  friend bool operator >= (const Edge& lhs, const Edge& rhs) { return !(lhs < rhs); };
+    long long u;
+    long long v;
+    long long cost;
 };
-
-struct MinimumSpanningTree {
-  struct UnionFind uf;
-  uint64_t weight; // 最小全域木の辺の重みの和
-  MinimumSpanningTree(int V, vector<Edge> &edges) : uf(V), weight(0) {
-    sort(edges.begin(), edges.end());
-    for (auto e : edges) { 
-      if (uf.same(e.from, e.to)) continue;
-      uf.unite(e.from, e.to);
-      weight += e.cost;
+bool comp_e(const Edge &e1, const Edge &e2) { return e1.cost < e2.cost; } // 辺を直接比較するための関数
+/* Kruskal :クラスカル法で minimum spanning tree を求める構造体
+    入力: 辺のvector, 頂点数V
+    最小全域木の重みの総和: sum
+    計算量: O(|E|log|V|)
+*/
+struct Kruskal {
+    UnionFind uft;
+    long long sum;  // 最小全域木の重みの総和
+    vector<Edge> edges;
+    int V;
+    Kruskal(const vector<Edge> &edges_, int V_) : edges(edges_), V(V_) { init(); }
+    void init() {
+        sort(edges.begin(), edges.end(), comp_e); // 辺の重みでソート
+        uft = UnionFind(V);
+        sum = 0;
+        for (auto e : edges) {
+            if (!uft.isSame(e.u, e.v) || e.cost < 0) { // 閉路にならなければ加える
+                uft.unite(e.u, e.v);
+            } else {
+                sum += e.cost;
+            }
+        }
     }
-  }
 };
-
 int main() {
-  vector<Edge> edges;
-  int V, E;
-  cin >> V >> E;
-  for (int i = 0; i < E; ++i) {
-    int x, y, w;
-    cin >> x >> y >> w;
-    edges.emplace_back(w, x, y);
-  }
-  MinimumSpanningTree mst(V, edges);
-  cout << mst.weight << endl;
+    int V, E;
+    cin >> V >> E;
+    vector<Edge> edges(E);
+    for (int i = 0; i < E; i++) {
+        long long s, t, w;
+        cin >> s >> t >> w;
+        if (w < 0) w = 0;
+        Edge e = {s, t, w};
+        edges[i] = e;
+    }
+    Kruskal krs(edges, V);
+    cout << krs.sum << endl;
+    return 0;
 }
