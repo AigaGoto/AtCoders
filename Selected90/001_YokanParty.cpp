@@ -1,40 +1,60 @@
+// 二分探索 + 貪欲法
+
 #include <iostream>
+#include <string>
+#include <vector>
+#include <math.h>
+#include <set>
+#include <map>
+#include <queue>
+#include <algorithm>
+#include <iomanip>
+// #include <atcoder/all>
+
 using namespace std;
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
 
-long long N, L, K;
-long long A[1 << 18];
+long long N, K, L;
 
-bool solve(long long M) {
-    long long count = 0, pre = 0;
-    for (int i = 1; i <= N; i++) {
-        if (A[i] - pre >= M && L - A[i] >= M) {
+long long A[100001];
+
+long long greedy (long long div) {
+    long long count = 0;
+    long long left = 0;
+    rep(i, N) {
+        if (A[i] - left >= div && L - A[i] >= div) {
+            left = A[i];
             count++;
-            pre = A[i];
         }
     }
-    if (count >= K) return true;
-    return false;
-}
 
+    return count;
+}
+ 
 int main() {
-    cin >> N >> L;
-    cin >> K;
-    for (int i = 1; i <= N; i++){
-        cin >> A[i];
-    }
+    cin >> N >> L >> K;
+
+    rep(i, N) cin >> A[i];
 
     long long left, right;
     left = -1;
     right = L+1;
 
-    // 二分探索の応用
+    long long count= 0;
+    long long max_div = 0;
+
     while(right - left > 1) {
         long long mid = left + (right - left) / 2;
-        if (!solve(mid)) right = mid;
-        else left = mid;
+        count = greedy(mid);
+        if (count < K) {
+            right = mid;
+        } else {
+            left = mid;
+            if (max_div < mid) max_div = mid;
+        }
     }
 
-    cout << left << endl;
+    cout << max_div << endl;
 
     return 0;
 }
