@@ -1,4 +1,4 @@
-// ソート
+// ソート & 貪欲法
 
 #include <iostream>
 #include <string>
