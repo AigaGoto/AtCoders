@@ -1,3 +1,6 @@
+// 大きいカードを3枚取り出す
+// あとは6通り試せば良い
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -16,19 +19,32 @@ vector<int> A;
 
 int main() {
     cin >> N;
-    rep(i, N) cin >> x; A.push_back(x);
+    rep(i, N) {
+        cin >> x;
+        A.push_back(x);
+    }
 
     sort(A.begin(), A.end());
 
-    string s1 = to_string(A[N-1]);
-    string s2 = to_string(A[N-2]);
-    string s3 = to_string(A[N-3]);
+    vector<string> S;
 
-    string ans;
+    S.push_back(to_string(A[N-3]));
+    S.push_back(to_string(A[N-2]));
+    S.push_back(to_string(A[N-1]));
 
-    if (s1[0] > s2[0] && s1[0] > s3[0]) {
-        ans = s1+s2+s3;
-    } else if (s2[0] > s1[])
+    string ans = "0";
+    string solution;
+
+    do {
+        solution = "";
+        rep(i, S.size()) {
+            solution += S[i];
+        }
+        ans = max(ans, solution);
+        
+    } while (next_permutation(S.begin(), S.end()));
+
+    cout << ans << endl;
 
     return 0;
 }
