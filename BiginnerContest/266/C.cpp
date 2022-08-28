@@ -11,7 +11,7 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < (int)(n); i++)
 
-long long divide = 10e9+7;
+int ax, ay, bx, by, cx, cy, dx, dy;
 
 int main() {
 

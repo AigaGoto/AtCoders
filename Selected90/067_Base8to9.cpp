@@ -1,4 +1,4 @@
-
+// n進数を扱う
 
 #include <string>
 #include <iostream>

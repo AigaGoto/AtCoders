@@ -11,10 +11,19 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < (int)(n); i++)
 
-long long divide = 10e9+7;
+long long N;
 
 int main() {
+    cin >> N;
+    long long a = 998244353;
 
+    int ans = N % a;
+
+    if (ans < 0) {
+        ans = a + ans;
+    }
+
+    cout << ans << endl;
 
     return 0;
 }
