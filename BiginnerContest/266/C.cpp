@@ -14,7 +14,7 @@ using namespace std;
 int ax, ay, bx, by, cx, cy, dx, dy;
 
 int main() {
-
+    
 
     return 0;
 }
