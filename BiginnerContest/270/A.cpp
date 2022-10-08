@@ -11,23 +11,24 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < (int)(n); i++)
 
-int H, W;
-int A[100009], B[100009];
+string toBinary(int n)
+{
+    string r;
+    while (n != 0){
+        r += ( n % 2 == 0 ? "0" : "1" );
+        n /= 2;
+    }
+    return r;
+}
 
 int main() {
-    cin >> H >> W;
+    int A, B;
 
-    rep(i, H) {
-        rep(j, W) {
-            cin >> A[i];
-        }
-    }
+    cin >> A >> B;
 
-    rep(i, H) {
-        rep(j, W) {
-            cin >> B[i];
-        }
-    }
+    
+
+    cout << output << endl;
 
     return 0;
 }

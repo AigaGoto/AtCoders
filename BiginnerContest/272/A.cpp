@@ -11,23 +11,18 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < (int)(n); i++)
 
-int H, W;
-int A[100009], B[100009];
+int N;
+int inp;
 
 int main() {
-    cin >> H >> W;
-
-    rep(i, H) {
-        rep(j, W) {
-            cin >> A[i];
-        }
+    cin >> N;
+    int ans = 0;
+    rep(i, N) {
+        cin >> inp;
+        ans += inp;
     }
 
-    rep(i, H) {
-        rep(j, W) {
-            cin >> B[i];
-        }
-    }
+    cout << ans << endl;
 
     return 0;
 }
