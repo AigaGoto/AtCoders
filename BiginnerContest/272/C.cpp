@@ -35,9 +35,24 @@ int main() {
     sort(A.begin(), A.end());
 
     if ((A[N-1] + A[N-2]) % 2 == 0) cout << A[N-1] + A[N-2] << endl;
-    else if ((A[N-1] + A[N-3]) % 2 == 0) cout << A[N-1] + A[N-3] << endl;
-    else if ((A[N-2] + A[N-3]) % 2 == 0) cout << A[N-2] + A[N-3] << endl;
-    else cout << -1 << endl;
+    else {
+        long ans1 = 0;
+        for (int i = N-2; i >= 0; i--) {
+            if ((A[N-1] + A[i]) % 2 == 0)  {
+                ans1 = A[N-1] + A[i];
+                break;
+            }
+        }
+        long ans2 = 0;
+        for (int i = N-3; i >= 0; i--) {
+            if ((A[N-2] + A[i]) % 2 == 0)  {
+                ans2 = A[N-2] + A[i];
+                break;
+            }
+        }
+        long ans = max(ans1, ans2);
+        cout << ans << endl;
+    }  
 
 
     return 0;
